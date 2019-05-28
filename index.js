@@ -7,6 +7,12 @@ class SnaxError extends Error {
       statusCode: this.statusCode
     };
   }
+
+  static fromJSON(jsonError) {
+    return jsonError.name
+      ? new errors[jsonError.name](jsonError.message)
+      : new errors.General(jsonError.message);
+  }
 }
 
 class AlreadyExists extends SnaxError {
@@ -78,7 +84,7 @@ class Restriction extends SnaxError {
   }
 }
 
-module.exports = {
+const errors = {
   AlreadyExists,
   BadRequest,
   NotFound,
@@ -87,3 +93,5 @@ module.exports = {
   Steemit,
   Restriction
 };
+
+module.exports = errors;
