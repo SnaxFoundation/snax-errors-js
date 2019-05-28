@@ -7,11 +7,11 @@ const mapChainErrorToSnaxError = chainError => {
     case 3050001:
       return new errors.AlreadyExists(errorMessage);
     case 3080001:
-      return new errors.InternalServer(errorMessage);
+      return new errors.ResourcesUsage(errorMessage);
     case 3080002:
-      return new errors.InternalServer(errorMessage);
+      return new errors.ResourcesUsage(errorMessage);
     case 3080004:
-      return new errors.InternalServer(errorMessage);
+      return new errors.ResourcesUsage(errorMessage);
     case 3081001:
       return new errors.InternalServer(errorMessage);
     case 3050003:
@@ -20,7 +20,7 @@ const mapChainErrorToSnaxError = chainError => {
       return new errors.InternalServer(errorMessage);
 
     default:
-      return new errors.InternalServer("Something wrong");
+      return new errors.InternalServer(errorMessage);
   }
 };
 class SnaxError extends Error {
@@ -123,6 +123,16 @@ class InternalServer extends SnaxError {
   }
 }
 
+class ResourcesUsage extends SnaxError {
+  constructor(message) {
+    super(message);
+    this.name = "ResourcesUsage";
+    this.message = message;
+    this.code = 9;
+    this.statusCode = 500;
+  }
+}
+
 const errors = {
   SnaxError,
   AlreadyExists,
@@ -132,7 +142,8 @@ const errors = {
   Twitter,
   Steemit,
   Restriction,
-  InternalServer
+  InternalServer,
+  ResourcesUsage
 };
 
 module.exports = errors;
