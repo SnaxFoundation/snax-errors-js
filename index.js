@@ -52,6 +52,15 @@ class Twitter extends SnaxError {
   }
 }
 
+class Steemit extends SnaxError {
+  constructor(message) {
+    super(message);
+    this.name = "Steemit";
+    this.message = message;
+    this.code = 500;
+  }
+}
+
 class Restriction extends SnaxError {
   constructor(message) {
     super(message);
@@ -67,5 +76,6 @@ module.exports = {
   NotFound,
   General,
   Twitter,
+  Steemit,
   Restriction
 };
