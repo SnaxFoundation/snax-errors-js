@@ -1,3 +1,28 @@
+const { isErrorFromChain } = require("./helpers");
+
+const mapChainErrorToSnaxError = chainError => {
+  const errorMessage = chainError.error.what;
+
+  switch (chainError.error.code) {
+    case 3050001:
+      return new errors.AlreadyExists(errorMessage);
+    case 3080001:
+      return new errors.InternalServer(errorMessage);
+    case 3080002:
+      return new errors.InternalServer(errorMessage);
+    case 3080004:
+      return new errors.InternalServer(errorMessage);
+    case 3081001:
+      return new errors.InternalServer(errorMessage);
+    case 3050003:
+      return new errors.InternalServer(errorMessage);
+    case 3050004:
+      return new errors.InternalServer(errorMessage);
+
+    default:
+      return new errors.InternalServer("Something wrong");
+  }
+};
 class SnaxError extends Error {
   toJSON() {
     return {
@@ -9,6 +34,10 @@ class SnaxError extends Error {
   }
 
   static fromJSON(jsonError) {
+    if (isErrorFromChain(jsonError)) {
+      return mapChainErrorToSnaxError(jsonError);
+    }
+
     return jsonError.name
       ? new errors[jsonError.name](jsonError.message)
       : new errors.General(jsonError.message);
@@ -84,14 +113,26 @@ class Restriction extends SnaxError {
   }
 }
 
+class InternalServer extends SnaxError {
+  constructor(message) {
+    super(message);
+    this.name = "InternalServer";
+    this.message = message;
+    this.code = 8;
+    this.statusCode = 500;
+  }
+}
+
 const errors = {
+  SnaxError,
   AlreadyExists,
   BadRequest,
   NotFound,
   General,
   Twitter,
   Steemit,
-  Restriction
+  Restriction,
+  InternalServer
 };
 
 module.exports = errors;
