@@ -1,3 +1,5 @@
+const _ = require("lodash");
+
 const isErrorFromChain = error => {
   return (
     error.code &&
@@ -10,6 +12,18 @@ const isErrorFromChain = error => {
   );
 };
 
+const extractCodeError = payload => {
+  if (_.isObject(payload)) {
+    return payload.code || null;
+  }
+
+  if (_.isInteger) {
+    return payload;
+  }
+  return null;
+};
+
 module.exports = {
-  isErrorFromChain
+  isErrorFromChain,
+  extractCodeError
 };

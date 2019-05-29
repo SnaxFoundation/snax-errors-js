@@ -1,4 +1,4 @@
-const { isErrorFromChain } = require("./helpers");
+const { isErrorFromChain, extractCodeError } = require("./helpers");
 
 const mapChainErrorToSnaxError = chainError => {
   const errorMessage = chainError.error.what;
@@ -133,6 +133,42 @@ class ResourcesUsage extends SnaxError {
   }
 }
 
+const isAlreadyExistsErrorType = errorOrCode => {
+  return extractCodeError(errorOrCode) === new AlreadyExists().code;
+};
+
+const isBadRequestErrorType = errorOrCode => {
+  return extractCodeError(errorOrCode) === new BadRequest().code;
+};
+
+const isNotFoundErrorType = errorOrCode => {
+  return extractCodeError(errorOrCode) === new NotFound().code;
+};
+
+const isGeneralErrorType = errorOrCode => {
+  return extractCodeError(errorOrCode) === new General().code;
+};
+
+const isTwitterErrorType = errorOrCode => {
+  return extractCodeError(errorOrCode) === new Twitter().code;
+};
+
+const isSteemitErrorType = errorOrCode => {
+  return extractCodeError(errorOrCode) === new Steemit().code;
+};
+
+const isRestrictionErrorType = errorOrCode => {
+  return extractCodeError(errorOrCode) === new Restriction().code;
+};
+
+const isInternalServerErrorType = errorOrCode => {
+  return extractCodeError(errorOrCode) === new InternalServer().code;
+};
+
+const isResourcesUsageErrorType = errorOrCode => {
+  return extractCodeError(errorOrCode) === new ResourcesUsage().code;
+};
+
 const errors = {
   SnaxError,
   AlreadyExists,
@@ -143,7 +179,16 @@ const errors = {
   Steemit,
   Restriction,
   InternalServer,
-  ResourcesUsage
+  ResourcesUsage,
+  isAlreadyExistsErrorType,
+  isBadRequestErrorType,
+  isNotFoundErrorType,
+  isGeneralErrorType,
+  isTwitterErrorType,
+  isSteemitErrorType,
+  isRestrictionErrorType,
+  isInternalServerErrorType,
+  isResourcesUsageErrorType
 };
 
 module.exports = errors;
