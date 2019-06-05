@@ -26,6 +26,7 @@ const mapChainErrorToSnaxError = chainError => {
 class SnaxError extends Error {
   constructor(message) {
     super(message);
+    this.version = "2.0";
     Object.defineProperty(this, "message", {
       enumerable: true,
       configurable: true,
