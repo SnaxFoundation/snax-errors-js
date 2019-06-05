@@ -5,32 +5,33 @@ const mapChainErrorToSnaxError = chainError => {
 
   switch (chainError.error.code) {
     case 3050001:
-      return new errors.AlreadyExists(errorMessage);
+      return new errors.AlreadyExistsError(errorMessage);
     case 3080001:
-      return new errors.ResourcesUsage(errorMessage);
+      return new errors.ResourcesUsageError(errorMessage);
     case 3080002:
-      return new errors.ResourcesUsage(errorMessage);
+      return new errors.ResourcesUsageError(errorMessage);
     case 3080004:
-      return new errors.ResourcesUsage(errorMessage);
+      return new errors.ResourcesUsageError(errorMessage);
     case 3081001:
-      return new errors.InternalServer(errorMessage);
+      return new errors.InternalServerError(errorMessage);
     case 3050003:
-      return new errors.InternalServer(errorMessage);
+      return new errors.InternalServerError(errorMessage);
     case 3050004:
-      return new errors.InternalServer(errorMessage);
+      return new errors.InternalServerError(errorMessage);
 
     default:
-      return new errors.InternalServer(errorMessage);
+      return new errors.InternalServerError(errorMessage);
   }
 };
 class SnaxError extends Error {
-  toJSON() {
-    return {
-      name: this.name,
-      message: this.message,
-      code: this.code,
-      statusCode: this.statusCode
-    };
+  constructor(message) {
+    super(message);
+    Object.defineProperty(this, "message", {
+      enumerable: true,
+      configurable: true,
+      writable: true,
+      value: message
+    });
   }
 
   static fromJSON(jsonError) {
@@ -40,93 +41,93 @@ class SnaxError extends Error {
 
     return jsonError.name
       ? new errors[jsonError.name](jsonError.message)
-      : new errors.General(jsonError.message);
+      : new errors.GeneralError(jsonError.message);
   }
 }
 
-class AlreadyExists extends SnaxError {
+class AlreadyExistsError extends SnaxError {
   constructor(message) {
     super(message);
-    this.name = "AlreadyExists";
+    this.name = "AlreadyExistsError";
     this.message = message;
     this.code = 1;
     this.statusCode = 500;
   }
 }
 
-class BadRequest extends SnaxError {
+class BadRequestError extends SnaxError {
   constructor(message) {
     super(message);
-    this.name = "BadRequest";
+    this.name = "BadRequestError";
     this.message = message;
     this.code = 2;
     this.statusCode = 400;
   }
 }
 
-class NotFound extends SnaxError {
+class NotFoundError extends SnaxError {
   constructor(message) {
     super(message);
-    this.name = "NotFound";
+    this.name = "NotFoundError";
     this.message = message;
     this.code = 3;
     this.statusCode = 404;
   }
 }
 
-class General extends SnaxError {
+class GeneralError extends SnaxError {
   constructor(message) {
     super(message);
-    this.name = "General";
+    this.name = "GeneralError";
     this.message = message;
     this.code = 4;
     this.statusCode = 500;
   }
 }
-class Twitter extends SnaxError {
+class TwitterError extends SnaxError {
   constructor(message) {
     super(message);
-    this.name = "Twitter";
+    this.name = "TwitterError";
     this.message = message;
     this.code = 5;
     this.statusCode = 500;
   }
 }
 
-class Steemit extends SnaxError {
+class SteemitError extends SnaxError {
   constructor(message) {
     super(message);
-    this.name = "Steemit";
+    this.name = "SteemitError";
     this.message = message;
     this.code = 6;
     this.statusCode = 500;
   }
 }
 
-class Restriction extends SnaxError {
+class RestrictionError extends SnaxError {
   constructor(message) {
     super(message);
-    this.name = "Restriction";
+    this.name = "RestrictionError";
     this.message = message;
     this.code = 7;
     this.statusCode = 500;
   }
 }
 
-class InternalServer extends SnaxError {
+class InternalServerError extends SnaxError {
   constructor(message) {
     super(message);
-    this.name = "InternalServer";
+    this.name = "InternalServerError";
     this.message = message;
     this.code = 8;
     this.statusCode = 500;
   }
 }
 
-class ResourcesUsage extends SnaxError {
+class ResourcesUsageError extends SnaxError {
   constructor(message) {
     super(message);
-    this.name = "ResourcesUsage";
+    this.name = "ResourcesUsageError";
     this.message = message;
     this.code = 9;
     this.statusCode = 500;
@@ -134,52 +135,52 @@ class ResourcesUsage extends SnaxError {
 }
 
 const isAlreadyExistsErrorType = errorOrCode => {
-  return extractCodeError(errorOrCode) === new AlreadyExists().code;
+  return extractCodeError(errorOrCode) === new AlreadyExistsError().code;
 };
 
 const isBadRequestErrorType = errorOrCode => {
-  return extractCodeError(errorOrCode) === new BadRequest().code;
+  return extractCodeError(errorOrCode) === new BadRequestError().code;
 };
 
 const isNotFoundErrorType = errorOrCode => {
-  return extractCodeError(errorOrCode) === new NotFound().code;
+  return extractCodeError(errorOrCode) === new NotFoundError().code;
 };
 
 const isGeneralErrorType = errorOrCode => {
-  return extractCodeError(errorOrCode) === new General().code;
+  return extractCodeError(errorOrCode) === new GeneralError().code;
 };
 
 const isTwitterErrorType = errorOrCode => {
-  return extractCodeError(errorOrCode) === new Twitter().code;
+  return extractCodeError(errorOrCode) === new TwitterError().code;
 };
 
 const isSteemitErrorType = errorOrCode => {
-  return extractCodeError(errorOrCode) === new Steemit().code;
+  return extractCodeError(errorOrCode) === new SteemitError().code;
 };
 
 const isRestrictionErrorType = errorOrCode => {
-  return extractCodeError(errorOrCode) === new Restriction().code;
+  return extractCodeError(errorOrCode) === new RestrictionError().code;
 };
 
 const isInternalServerErrorType = errorOrCode => {
-  return extractCodeError(errorOrCode) === new InternalServer().code;
+  return extractCodeError(errorOrCode) === new InternalServerError().code;
 };
 
 const isResourcesUsageErrorType = errorOrCode => {
-  return extractCodeError(errorOrCode) === new ResourcesUsage().code;
+  return extractCodeError(errorOrCode) === new ResourcesUsageError().code;
 };
 
 const errors = {
   SnaxError,
-  AlreadyExists,
-  BadRequest,
-  NotFound,
-  General,
-  Twitter,
-  Steemit,
-  Restriction,
-  InternalServer,
-  ResourcesUsage,
+  AlreadyExistsError,
+  BadRequestError,
+  NotFoundError,
+  GeneralError,
+  TwitterError,
+  SteemitError,
+  RestrictionError,
+  InternalServerError,
+  ResourcesUsageError,
   isAlreadyExistsErrorType,
   isBadRequestErrorType,
   isNotFoundErrorType,

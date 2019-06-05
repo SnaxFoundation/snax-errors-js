@@ -1,6 +1,6 @@
 {
   "name": "@snaxfoundation/snax-errors-js",
-  "version": "1.0.6",
+  "version": "2.0.1",
   "main": "index.js",
   "repository": "git@github-snax.com:SnaxFoundation/snax-errors-js.git",
   "author": "bee-warrior <casual.bee.warrior@gmail.com>",
