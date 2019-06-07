@@ -17,9 +17,10 @@ const extractCodeError = payload => {
     return payload.code || null;
   }
 
-  if (_.isInteger) {
+  if (_.isInteger(payload)) {
     return payload;
   }
+
   return null;
 };
 

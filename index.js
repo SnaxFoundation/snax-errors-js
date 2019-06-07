@@ -18,11 +18,11 @@ const mapChainErrorToSnaxError = chainError => {
       return new errors.InternalServerError(errorMessage);
     case 3050004:
       return new errors.InternalServerError(errorMessage);
-
     default:
       return new errors.InternalServerError(errorMessage);
   }
 };
+
 class SnaxError extends Error {
   constructor(message) {
     super(message);
